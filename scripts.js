@@ -3,7 +3,20 @@ const todos = {
 }
 
 todos.displayTodos = function() {
-    console.log(this.todos);
+    if (this.todos.length == 0) {
+        return console.log("You don't have any todos!")
+    }
+
+    console.log("My Todos:");
+
+    for (let i = 0; i < this.todos.length; i++) {
+        if(this.todos[i].completed == false) {
+            console.log("[ ]", this.todos[i].todoText)
+        } else {
+            console.log("[X]", this.todos[i].todoText)
+        }
+    }
+
 }
 
 todos.addTodo = function(text) {
