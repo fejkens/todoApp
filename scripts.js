@@ -2,7 +2,11 @@ const todos = {
     todos: []
 };
 
+document.getElementById("displayTodos").onclick = () => { todos.displayTodos(); };
+document.getElementById("toggleAll").onclick = () => { todos.toggleAll(); }; 
+
 todos.displayTodos = function() {
+    debugger;
     if (this.todos.length == 0) {
         return console.log("You don't have any todos!");
     }
