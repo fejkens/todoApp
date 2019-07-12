@@ -2,11 +2,31 @@ const todos = {
     todos: []
 };
 
-document.getElementById("displayTodos").onclick = () => { todos.displayTodos(); };
-document.getElementById("toggleAll").onclick = () => { todos.toggleAll(); }; 
+let $ = function(elem) {
+    return document.querySelector(elem);
+}
+
+$("#displayTodos").onclick = () => { todos.displayTodos(); };
+$("#toggleAll").onclick = () => { todos.toggleAll(); };
+$("#newTodoButton").onclick = () => {
+    let newTodo = $("#newTodo").value;
+    todos.addTodo(newTodo);
+    $("#newTodo").value = "";
+};
+$("#changeTodoButton").onclick = () => {
+    let index = $("#changeTodoIndex").valueAsNumber;
+    let text = $("#changeTodoText").value;
+    todos.changeTodo(index, text);
+    $("#changeTodoIndex").value = "";
+    $("#changeTodoText").value = "";
+};
+$("#deleteTodoButton").onclick = () => {
+    let index = $("#deleteTodoIndex").valueAsNumber;
+    todos.deleteTodo(index);
+    $("#deleteTodoIndex").value = "";
+};
 
 todos.displayTodos = function() {
-    debugger;
     if (this.todos.length == 0) {
         return console.log("You don't have any todos!");
     }
