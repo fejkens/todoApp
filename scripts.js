@@ -25,6 +25,11 @@ $("#deleteTodoButton").onclick = () => {
     todos.deleteTodo(index);
     $("#deleteTodoIndex").value = "";
 };
+$("#toggleTodoButton").onclick = () => {
+    let index = $("#toggleTodoIndex").valueAsNumber;
+    todos.toggleCompleted(index);
+    $("#toggleTodoIndex").value = "";
+}
 
 todos.displayTodos = function() {
     if (this.todos.length == 0) {
@@ -62,6 +67,7 @@ todos.deleteTodo = function(index) {
 
 todos.toggleCompleted = function(index) {
     this.todos[index].completed = !this.todos[index].completed;
+    this.displayTodos();
 };
 
 todos.toggleAll = function() {
@@ -71,13 +77,14 @@ todos.toggleAll = function() {
     
     if (falseCheck.length === this.todos.length) {
         for (let i = 0; i < this.todos.length; i++) {
-            todos.toggleCompleted(i);
+            this.todos[i].completed = !this.todos[i].completed;
         }
     } else {
         for (let i = 0; i < this.todos.length; i++) {
             if (this.todos[i].completed === false) {
-                todos.toggleCompleted(i);
+                this.todos[i].completed = !this.todos[i].completed;
             }
         }
     }
+    this.displayTodos();
 };
