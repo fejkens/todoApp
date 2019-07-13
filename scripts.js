@@ -19,16 +19,12 @@ $("#changeTodoButton").onclick = () => {
     $("#changeTodoIndex").value = "";
     $("#changeTodoText").value = "";
 };
-$("#deleteTodoButton").onclick = () => {
-    let index = $("#deleteTodoIndex").valueAsNumber;
-    todos.deleteTodo(index);
-    $("#deleteTodoIndex").value = "";
-};
 $("#toggleTodoButton").onclick = () => {
     let index = $("#toggleTodoIndex").valueAsNumber;
     todos.toggleCompleted(index);
     $("#toggleTodoIndex").value = "";
-}
+};
+
 
 todos.addTodo = function(text) {
     this.todos.push({
@@ -59,15 +55,15 @@ todos.toggleAll = function() {
     });
     
     if (falseCheck.length === this.todos.length) {
-        for (let i = 0; i < this.todos.length; i++) {
-            this.todos[i].completed = !this.todos[i].completed;
-        }
+        this.todos.forEach(function (elem) {
+            elem.completed = !elem.completed;
+        });
     } else {
-        for (let i = 0; i < this.todos.length; i++) {
-            if (this.todos[i].completed === false) {
-                this.todos[i].completed = !this.todos[i].completed;
+        this.todos.forEach(function (elem) {
+            if (elem.completed === false) {
+                elem.completed = !elem.completed;
             }
-        }
+        });
     }
     display.displayTodos();
 };
@@ -77,26 +73,31 @@ const display = {};
 display.displayTodos = function() {
     let todosList = $("#todosList");
     todosList.innerHTML = "";
-    for (let i = 0; i < todos.todos.length; i++) {
+    todos.todos.forEach(function (elem, i) {
         let todosLi = document.createElement("li");
+        todosLi.id = "todoId" + i;
 
-        let deleteButton = display.createDeleteButton();
-        deleteButton.id = "delete" + i;
-
-        if (todos.todos[i].completed) {
-            todosLi.innerHTML = "[X] " + todos.todos[i].todoText;
-            todosLi.appendChild(deleteButton);
+        if (elem.completed) {
+            todosLi.innerHTML = "[X] " + elem.todoText;
         } else {
-            todosLi.innerHTML = "[ ] " + todos.todos[i].todoText;
-            todosLi.appendChild(deleteButton);
+            todosLi.innerHTML = "[ ] " + elem.todoText;
         }
+
+        todosLi.appendChild(display.createDeleteButton());
         todosList.appendChild(todosLi);
-    }
+    });
 }
 
 display.createDeleteButton = function() {
     let deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.className = "deleteButton";
+
+    deleteButton.addEventListener("click", function(event) {
+        let deleteId = event.originalTarget.parentElement.id;
+        deleteId = +deleteId.slice(deleteId.length - 1);
+        todos.deleteTodo(deleteId);
+    });
+
     return deleteButton;
 };
