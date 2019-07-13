@@ -19,12 +19,6 @@ $("#changeTodoButton").onclick = () => {
     $("#changeTodoIndex").value = "";
     $("#changeTodoText").value = "";
 };
-$("#toggleTodoButton").onclick = () => {
-    let index = $("#toggleTodoIndex").valueAsNumber;
-    todos.toggleCompleted(index);
-    $("#toggleTodoIndex").value = "";
-};
-
 
 todos.addTodo = function(text) {
     this.todos.push({
@@ -53,18 +47,17 @@ todos.toggleAll = function() {
     let falseCheck = this.todos.filter((item) => {
         return item.completed == true;
     });
-    
-    if (falseCheck.length === this.todos.length) {
-        this.todos.forEach(function (elem) {
+
+    this.todos.forEach(function (elem) {
+        if (falseCheck.length === todos.todos.length) {
             elem.completed = !elem.completed;
-        });
-    } else {
-        this.todos.forEach(function (elem) {
+        } else {
             if (elem.completed === false) {
                 elem.completed = !elem.completed;
             }
-        });
-    }
+        }
+    });
+
     display.displayTodos();
 };
 
@@ -84,6 +77,7 @@ display.displayTodos = function() {
         }
 
         todosLi.appendChild(display.createDeleteButton());
+        todosLi.appendChild(display.createCompletedButton());
         todosList.appendChild(todosLi);
     });
 }
@@ -101,3 +95,17 @@ display.createDeleteButton = function() {
 
     return deleteButton;
 };
+
+display.createCompletedButton = function() {
+    let completedButton = document.createElement("button");
+    completedButton.textContent = "Completed";
+    completedButton.className = "completedButton";
+
+    completedButton.addEventListener("click", function(event) {
+        let completedId = event.originalTarget.parentElement.id;
+        completedId = +completedId.slice(completedId.length - 1);
+        todos.toggleCompleted(completedId);
+    });
+
+    return completedButton;
+}
