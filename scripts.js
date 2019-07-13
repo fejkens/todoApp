@@ -6,7 +6,6 @@ let $ = function(elem) {
     return document.querySelector(elem);
 }
 
-$("#displayTodos").onclick = () => { todos.displayTodos(); };
 $("#toggleAll").onclick = () => { todos.toggleAll(); };
 $("#newTodoButton").onclick = () => {
     let newTodo = $("#newTodo").value;
@@ -31,43 +30,27 @@ $("#toggleTodoButton").onclick = () => {
     $("#toggleTodoIndex").value = "";
 }
 
-todos.displayTodos = function() {
-    if (this.todos.length == 0) {
-        return console.log("You don't have any todos!");
-    }
-
-    console.log("My Todos:");
-
-    for (let i = 0; i < this.todos.length; i++) {
-        if(this.todos[i].completed == false) {
-            console.log("[ ]", this.todos[i].todoText);
-        } else {
-            console.log("[X]", this.todos[i].todoText);
-        }
-    }
-};
-
 todos.addTodo = function(text) {
     this.todos.push({
         todoText: text,
         completed: false
     });
-    this.displayTodos();
+    display.displayTodos();
 };
 
 todos.changeTodo = function(index, newText) {
     this.todos[index].todoText = newText;
-    this.displayTodos();
+    display.displayTodos();
 };
 
 todos.deleteTodo = function(index) {
     this.todos.splice(index, 1);
-    this.displayTodos();
+    display.displayTodos();
 };
 
 todos.toggleCompleted = function(index) {
     this.todos[index].completed = !this.todos[index].completed;
-    this.displayTodos();
+    display.displayTodos();
 };
 
 todos.toggleAll = function() {
@@ -86,5 +69,29 @@ todos.toggleAll = function() {
             }
         }
     }
-    this.displayTodos();
+    display.displayTodos();
+};
+
+const display = {};
+
+display.displayTodos = function() {
+    let todosList = $("#todosList");
+    todosList.innerHTML = "";
+    for (let i = 0; i < todos.todos.length; i++) {
+        let todosLi = document.createElement("li");
+
+        if (todos.todos[i].completed) {
+            todosLi.innerHTML = "[X] " + todos.todos[i].todoText;
+        } else {
+            todosLi.innerHTML = "[ ] " + todos.todos[i].todoText;
+        }
+        todosList.appendChild(todosLi);
+    }
+}
+
+display.createDeleteButton = function() {
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "deleteButton";
+    return deleteButton;
 };
