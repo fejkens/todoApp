@@ -80,10 +80,15 @@ display.displayTodos = function() {
     for (let i = 0; i < todos.todos.length; i++) {
         let todosLi = document.createElement("li");
 
+        let deleteButton = display.createDeleteButton();
+        deleteButton.id = "delete" + i;
+
         if (todos.todos[i].completed) {
             todosLi.innerHTML = "[X] " + todos.todos[i].todoText;
+            todosLi.appendChild(deleteButton);
         } else {
             todosLi.innerHTML = "[ ] " + todos.todos[i].todoText;
+            todosLi.appendChild(deleteButton);
         }
         todosList.appendChild(todosLi);
     }
