@@ -68,16 +68,32 @@ display.displayTodos = function() {
     todosList.innerHTML = "";
     todos.todos.forEach(function (elem, i) {
         let todosLi = document.createElement("li");
+        let todosCheckbox = document.createElement("input");
+        let todoText = document.createElement("p");
+
+        todoText.innerHTML = elem.todoText;
+        todosCheckbox.type = "checkbox";
         todosLi.id = "todoId" + i;
 
+        todosCheckbox.addEventListener("change", function() {
+            if (todosCheckbox.checked === true) {
+                todos.todos[i].completed = true;
+            } else {
+                todos.todos[i].completed = false;
+            }
+            display.displayTodos();
+        });
+
+        todosLi.appendChild(todosCheckbox);
+        todosLi.appendChild(todoText);
+
         if (elem.completed) {
-            todosLi.innerHTML = "[X] " + elem.todoText;
+            todosCheckbox.checked = true;
         } else {
-            todosLi.innerHTML = "[ ] " + elem.todoText;
+            todosCheckbox.checked = false;
         }
 
         todosLi.appendChild(display.createDeleteButton());
-        todosLi.appendChild(display.createCompletedButton());
         todosList.appendChild(todosLi);
     });
 }
@@ -95,17 +111,3 @@ display.createDeleteButton = function() {
 
     return deleteButton;
 };
-
-display.createCompletedButton = function() {
-    let completedButton = document.createElement("button");
-    completedButton.textContent = "Completed";
-    completedButton.className = "completedButton";
-
-    completedButton.addEventListener("click", function(event) {
-        let completedId = event.originalTarget.parentElement.id;
-        completedId = +completedId.slice(completedId.length - 1);
-        todos.toggleCompleted(completedId);
-    });
-
-    return completedButton;
-}
