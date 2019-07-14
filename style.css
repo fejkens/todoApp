@@ -22,8 +22,49 @@ body {
     height: 100%;
 }
 
+input[type="text"] {
+    width: 100%;
+}
+
+#todoApp div {
+    display: flex;
+    margin: 20px 0;
+}
+
+#todosList {
+    margin-top: 25px;
+}
+
 #todosList li {
     display: flex;
     list-style: none;
+    height: 30px;
 }
 
+#todosList input[type="checkbox"] {
+    transform: scale(1.5);
+}
+
+#todosList * {
+    margin-left: 15px;
+}
+
+.pFalse {
+    line-height: 30px;
+    width: 100%;
+    border-bottom: solid 1px black;
+}
+
+.pTrue {
+    line-height: 30px;
+    width: 100%;
+    border-bottom: solid 1px grey;
+    color: grey;
+    text-decoration: line-through;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px;
+    margin-bottom: 50px;
+}

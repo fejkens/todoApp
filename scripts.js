@@ -74,6 +74,11 @@ display.displayTodos = function() {
         todoText.innerHTML = elem.todoText;
         todosCheckbox.type = "checkbox";
         todosLi.id = "todoId" + i;
+        todoText.className = "pFalse";
+
+        if (elem.completed === true) {
+            todoText.className = "pTrue"
+        }
 
         todosCheckbox.addEventListener("change", function() {
             if (todosCheckbox.checked === true) {
