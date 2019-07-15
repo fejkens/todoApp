@@ -12,13 +12,6 @@ $("#newTodoButton").onclick = () => {
     todos.addTodo(newTodo);
     $("#newTodo").value = "";
 };
-$("#changeTodoButton").onclick = () => {
-    let index = $("#changeTodoIndex").valueAsNumber;
-    let text = $("#changeTodoText").value;
-    todos.changeTodo(index, text);
-    $("#changeTodoIndex").value = "";
-    $("#changeTodoText").value = "";
-};
 
 todos.addTodo = function(text) {
     this.todos.push({
@@ -70,14 +63,22 @@ display.displayTodos = function() {
         let todosLi = document.createElement("li");
         let todosCheckbox = document.createElement("input");
         let todoText = document.createElement("p");
+        let editText = document.createElement("input");
 
         todoText.innerHTML = elem.todoText;
         todosCheckbox.type = "checkbox";
         todosLi.id = "todoId" + i;
         todoText.className = "pFalse";
+        editText.type = "text";
+        editText.style.background = "transparent";
+        editText.style.border = "none";
+        editText.style.borderBottom = "solid 1px black";
+        editText.className = "editTodo";
+        editText.value = elem.todoText;
+        editText.autofocus = "true";
 
         if (elem.completed === true) {
-            todoText.className = "pTrue"
+            todoText.className = "pTrue";
         }
 
         todosCheckbox.addEventListener("change", function() {
@@ -89,7 +90,21 @@ display.displayTodos = function() {
             display.displayTodos();
         });
 
+        editText.addEventListener("blur", function() {
+            
+            let newTodoText = editText.value;
+            todos.changeTodo(i, newTodoText);
+            todoText.style.display = "inline";
+            editText.style.display = "none";
+        });
+
+        todoText.addEventListener("click", function() {
+            todoText.style.display = "none";
+            editText.style.display = "inline";
+        });
+
         todosLi.appendChild(todosCheckbox);
+        todosLi.appendChild(editText);
         todosLi.appendChild(todoText);
 
         if (elem.completed) {
