@@ -1,10 +1,16 @@
+if (JSON.parse(localStorage.getItem("todos")).length === 0) {
+    localStorage.setItem("todos", JSON.stringify([]));
+}
+
 const todos = {
-    todos: []
+    todos: function() {
+        return JSON.parse(localStorage.getItem("todos"));
+    }
 };
 
 let $ = function(elem) {
     return document.querySelector(elem);
-}
+};
 
 $("#toggleAll").onclick = () => { todos.toggleAll(); };
 $("#newTodoButton").onclick = () => {
@@ -13,36 +19,50 @@ $("#newTodoButton").onclick = () => {
     $("#newTodo").value = "";
 };
 
+todos.updateTodos = function(arr) {
+    arr = JSON.stringify(arr);
+    localStorage.setItem("todos", arr);
+};
+
 todos.addTodo = function(text) {
-    this.todos.push({
+    let todosArr = todos.todos();
+    todosArr.push({
         todoText: text,
         completed: false
     });
+    todos.updateTodos(todosArr);
     display.displayTodos();
 };
 
 todos.changeTodo = function(index, newText) {
-    this.todos[index].todoText = newText;
+    let todosArr = todos.todos();
+    todosArr[index].todoText = newText;
+    todos.updateTodos(todosArr);
     display.displayTodos();
 };
 
 todos.deleteTodo = function(index) {
-    this.todos.splice(index, 1);
+    let todosArr = todos.todos();
+    todosArr.splice(index, 1);
+    todos.updateTodos(todosArr);
     display.displayTodos();
 };
 
 todos.toggleCompleted = function(index) {
-    this.todos[index].completed = !this.todos[index].completed;
+    let todosArr = todos.todos();
+    todosArr[index].completed = !todosArr[index].completed;
+    todos.updateTodos(todosArr);
     display.displayTodos();
 };
 
 todos.toggleAll = function() {
-    let falseCheck = this.todos.filter((item) => {
+    let todosArr = todos.todos();
+    let falseCheck = todosArr.filter((item) => {
         return item.completed == true;
     });
 
-    this.todos.forEach(function (elem) {
-        if (falseCheck.length === todos.todos.length) {
+    todosArr.forEach(function (elem) {
+        if (falseCheck.length === todosArr.length) {
             elem.completed = !elem.completed;
         } else {
             if (elem.completed === false) {
@@ -50,7 +70,7 @@ todos.toggleAll = function() {
             }
         }
     });
-
+    todos.updateTodos(todosArr);
     display.displayTodos();
 };
 
@@ -59,7 +79,8 @@ const display = {};
 display.displayTodos = function() {
     let todosList = $("#todosList");
     todosList.innerHTML = "";
-    todos.todos.forEach(function (elem, i) {
+    let todosArr = todos.todos();
+    todosArr.forEach(function (elem, i) {
         let todosLi = document.createElement("li");
         let todosCheckbox = document.createElement("input");
         let todoText = document.createElement("p");
@@ -83,10 +104,11 @@ display.displayTodos = function() {
 
         todosCheckbox.addEventListener("change", function() {
             if (todosCheckbox.checked === true) {
-                todos.todos[i].completed = true;
+                todosArr[i].completed = true;
             } else {
-                todos.todos[i].completed = false;
+                todosArr[i].completed = false;
             }
+            todos.updateTodos(todosArr);
             display.displayTodos();
         });
 
@@ -116,7 +138,7 @@ display.displayTodos = function() {
         todosLi.appendChild(display.createDeleteButton());
         todosList.appendChild(todosLi);
     });
-}
+};
 
 display.createDeleteButton = function() {
     let deleteButton = document.createElement("button");
@@ -131,3 +153,5 @@ display.createDeleteButton = function() {
 
     return deleteButton;
 };
+
+display.displayTodos();
